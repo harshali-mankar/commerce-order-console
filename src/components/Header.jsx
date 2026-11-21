@@ -5,7 +5,6 @@ import {
   Typography,
   Box,
   Button,
-  Badge,
   Chip,
   Container
 } from '@mui/material';
@@ -24,11 +23,11 @@ export default function Header({
   return (
     <AppBar
       position="sticky"
-      color="inherit"
       elevation={0}
       sx={{
-        backgroundColor: '#ffffff',
-        borderBottom: '1px solid #e2e8f0',
+        backgroundColor: '#0f172a',
+        color: '#ffffff',
+        borderBottom: '1px solid #1e293b',
         zIndex: 1100
       }}
       className="app-header"
@@ -42,12 +41,12 @@ export default function Header({
                 width: 36,
                 height: 36,
                 borderRadius: 2,
-                backgroundColor: 'primary.main',
+                backgroundColor: '#4f46e5',
                 color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 2px 4px rgba(79, 70, 229, 0.25)'
+                boxShadow: '0 2px 6px rgba(79, 70, 229, 0.4)'
               }}
             >
               <StorefrontIcon fontSize="small" />
@@ -61,7 +60,7 @@ export default function Header({
                   sx={{
                     fontWeight: 700,
                     fontSize: '1.05rem',
-                    color: 'text.primary',
+                    color: '#f8fafc',
                     lineHeight: 1.2
                   }}
                 >
@@ -75,12 +74,13 @@ export default function Header({
                     height: 20,
                     fontSize: '0.675rem',
                     fontWeight: 600,
-                    backgroundColor: '#e0e7ff',
-                    color: '#4338ca'
+                    backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                    color: '#a5b4fc',
+                    border: '1px solid rgba(99, 102, 241, 0.3)'
                   }}
                 />
               </Box>
-              <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
+              <Typography variant="caption" sx={{ color: '#94a3b8', display: 'block' }}>
                 Phone Orders & Real-time Inventory Management
               </Typography>
             </Box>
@@ -90,19 +90,21 @@ export default function Header({
           <Box className="header-nav" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <Button
               className={`nav-tab ${activeTab === 'catalogue' ? 'active' : ''}`}
-              variant={activeTab === 'catalogue' ? 'contained' : 'text'}
-              color="primary"
+              variant="text"
               startIcon={<DashboardOutlinedIcon fontSize="small" />}
               onClick={() => setActiveTab('catalogue')}
               sx={{
                 px: 2,
-                py: 0.8,
+                py: 0.75,
                 borderRadius: 2,
                 fontWeight: 600,
-                ...(activeTab !== 'catalogue' && {
-                  color: 'text.secondary',
-                  '&:hover': { backgroundColor: '#f1f5f9', color: 'text.primary' }
-                })
+                fontSize: '0.875rem',
+                backgroundColor: activeTab === 'catalogue' ? '#4f46e5' : 'transparent',
+                color: activeTab === 'catalogue' ? '#ffffff' : '#94a3b8',
+                '&:hover': {
+                  backgroundColor: activeTab === 'catalogue' ? '#4338ca' : 'rgba(255, 255, 255, 0.08)',
+                  color: '#ffffff'
+                }
               }}
             >
               Catalogue
@@ -110,60 +112,78 @@ export default function Header({
 
             <Button
               className={`nav-tab ${activeTab === 'orders' ? 'active' : ''}`}
-              variant={activeTab === 'orders' ? 'contained' : 'text'}
-              color="primary"
-              startIcon={
-                <Badge
-                  badgeContent={ordersCount}
-                  color="secondary"
-                  max={99}
-                  sx={{ '& .MuiBadge-badge': { fontSize: '0.7rem', height: 18, minWidth: 18 } }}
-                >
-                  <ReceiptLongOutlinedIcon fontSize="small" />
-                </Badge>
-              }
+              variant="text"
+              startIcon={<ReceiptLongOutlinedIcon fontSize="small" />}
               onClick={() => setActiveTab('orders')}
               sx={{
                 px: 2,
-                py: 0.8,
+                py: 0.75,
                 borderRadius: 2,
                 fontWeight: 600,
-                ...(activeTab !== 'orders' && {
-                  color: 'text.secondary',
-                  '&:hover': { backgroundColor: '#f1f5f9', color: 'text.primary' }
-                })
+                fontSize: '0.875rem',
+                backgroundColor: activeTab === 'orders' ? '#4f46e5' : 'transparent',
+                color: activeTab === 'orders' ? '#ffffff' : '#94a3b8',
+                '&:hover': {
+                  backgroundColor: activeTab === 'orders' ? '#4338ca' : 'rgba(255, 255, 255, 0.08)',
+                  color: '#ffffff'
+                }
               }}
             >
               Orders
-              {ordersCount > 0 && <span className="nav-badge" style={{ display: 'none' }}>{ordersCount}</span>}
+              {ordersCount > 0 && (
+                <Chip
+                  label={ordersCount}
+                  size="small"
+                  className="nav-badge"
+                  sx={{
+                    ml: 1,
+                    height: 18,
+                    fontSize: '0.675rem',
+                    fontWeight: 700,
+                    backgroundColor: '#38bdf8',
+                    color: '#0f172a'
+                  }}
+                />
+              )}
             </Button>
 
             <Button
               className="cart-button"
               variant="outlined"
-              color="primary"
-              startIcon={
-                <Badge
-                  badgeContent={cartCount}
-                  color="error"
-                  max={99}
-                  sx={{ '& .MuiBadge-badge': { fontSize: '0.7rem', height: 18, minWidth: 18 } }}
-                >
-                  <ShoppingBagOutlinedIcon fontSize="small" />
-                </Badge>
-              }
+              startIcon={<ShoppingBagOutlinedIcon fontSize="small" />}
               onClick={() => setIsCartOpen(true)}
               sx={{
                 ml: 1,
                 px: 2,
-                py: 0.8,
+                py: 0.75,
                 borderRadius: 2,
-                borderWidth: 1.5,
-                fontWeight: 600
+                fontWeight: 600,
+                fontSize: '0.875rem',
+                borderColor: '#334155',
+                color: '#f8fafc',
+                backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                '&:hover': {
+                  borderColor: '#64748b',
+                  backgroundColor: 'rgba(255, 255, 255, 0.08)'
+                }
               }}
             >
               Cart
-              {cartCount > 0 && <span className="cart-count" style={{ display: 'none' }}>{cartCount}</span>}
+              {cartCount > 0 && (
+                <Chip
+                  label={cartCount}
+                  size="small"
+                  className="cart-count"
+                  sx={{
+                    ml: 1,
+                    height: 18,
+                    fontSize: '0.675rem',
+                    fontWeight: 700,
+                    backgroundColor: '#ef4444',
+                    color: '#ffffff'
+                  }}
+                />
+              )}
             </Button>
           </Box>
         </Toolbar>

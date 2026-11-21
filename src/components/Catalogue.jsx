@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Box,
   Typography,
-  Grid,
   Card,
   CardContent,
   CardActions,
@@ -10,8 +9,7 @@ import {
   Button,
   Alert,
   CircularProgress,
-  Paper,
-  Stack
+  Paper
 } from '@mui/material';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import SyncIcon from '@mui/icons-material/Sync';
@@ -42,7 +40,7 @@ export default function Catalogue({
         }}
         className="state-box"
       >
-        <CircularProgress size={40} thickness={4} sx={{ mb: 2, color: 'primary.main' }} />
+        <CircularProgress size={40} thickness={4} sx={{ mb: 2, color: '#4f46e5' }} />
         <Typography variant="h6" className="state-title" sx={{ fontWeight: 600, mb: 0.5 }}>
           Loading Product Catalogue...
         </Typography>
@@ -103,14 +101,14 @@ export default function Catalogue({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          mb: 4,
+          mb: 3.5,
           flexWrap: 'wrap',
           gap: 2
         }}
         className="page-header"
       >
         <Box>
-          <Typography variant="h5" component="h1" className="page-title" sx={{ fontWeight: 700 }}>
+          <Typography variant="h5" component="h1" className="page-title" sx={{ fontWeight: 700, color: '#0f172a' }}>
             Product Catalogue & Inventory
           </Typography>
           <Typography variant="body2" color="text.secondary" className="page-subtitle">
@@ -124,8 +122,11 @@ export default function Catalogue({
           onClick={onRefresh}
           className="btn-secondary"
           sx={{
+            borderRadius: 2,
             borderColor: '#cbd5e1',
-            color: 'text.secondary',
+            color: '#475569',
+            backgroundColor: '#ffffff',
+            fontWeight: 600,
             '&:hover': { borderColor: '#94a3b8', backgroundColor: '#f8fafc' }
           }}
         >
@@ -133,8 +134,19 @@ export default function Catalogue({
         </Button>
       </Box>
 
-      {/* Products Grid */}
-      <Grid container spacing={3} className="products-grid">
+      {/* Products Grid: Responsive 3-column auto-fill layout */}
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'repeat(2, 1fr)',
+            md: 'repeat(3, 1fr)'
+          },
+          gap: 2.5
+        }}
+        className="products-grid"
+      >
         {products.map((product) => {
           const isOutOfStock = product.stock_quantity <= 0;
           const cartItem = cartItems.find((i) => i.productId === product.id);
@@ -143,168 +155,174 @@ export default function Catalogue({
           const cannotAddMore = isOutOfStock || remainingAvailable <= 0;
 
           return (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
-              <Card
-                className={`product-card ${isOutOfStock ? 'out-of-stock' : ''}`}
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  borderRadius: 3,
-                  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
-                  border: isOutOfStock ? '1px dashed #cbd5e1' : '1px solid #e2e8f0',
-                  backgroundColor: isOutOfStock ? '#fafafa' : '#ffffff',
-                  opacity: isOutOfStock ? 0.78 : 1,
-                  '&:hover': {
-                    transform: isOutOfStock ? 'none' : 'translateY(-3px)',
-                    boxShadow: isOutOfStock ? 'none' : '0 10px 15px -3px rgba(0, 0, 0, 0.08)'
-                  }
-                }}
-              >
-                <CardContent sx={{ p: 2.5 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
-                    <Typography
-                      variant="caption"
-                      className="product-sku"
+            <Card
+              key={product.id}
+              className={`product-card ${isOutOfStock ? 'out-of-stock' : ''}`}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                borderRadius: 2.5,
+                border: isOutOfStock ? '1px dashed #cbd5e1' : '1px solid #e2e8f0',
+                backgroundColor: isOutOfStock ? '#fafafa' : '#ffffff',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+                transition: 'transform 0.15s ease, box-shadow 0.15s ease',
+                '&:hover': {
+                  transform: isOutOfStock ? 'none' : 'translateY(-2px)',
+                  boxShadow: isOutOfStock ? 'none' : '0 4px 12px rgba(0, 0, 0, 0.08)'
+                }
+              }}
+            >
+              <CardContent sx={{ p: 2.5 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
+                  <Typography
+                    variant="caption"
+                    className="product-sku"
+                    sx={{
+                      fontFamily: 'monospace',
+                      fontWeight: 700,
+                      backgroundColor: '#f1f5f9',
+                      px: 1,
+                      py: 0.3,
+                      borderRadius: 1,
+                      color: '#475569',
+                      fontSize: '0.75rem'
+                    }}
+                  >
+                    {product.sku}
+                  </Typography>
+
+                  {isOutOfStock ? (
+                    <Chip
+                      icon={<RemoveCircleOutlinedIcon sx={{ fontSize: '14px !important' }} />}
+                      label="0 in stock — Unavailable"
+                      size="small"
+                      className="stock-badge out-of-stock"
                       sx={{
-                        fontFamily: 'monospace',
-                        fontWeight: 700,
+                        fontWeight: 600,
+                        fontSize: '0.725rem',
                         backgroundColor: '#f1f5f9',
-                        px: 1,
-                        py: 0.3,
-                        borderRadius: 1,
-                        color: '#475569'
+                        color: '#64748b',
+                        border: '1px solid #e2e8f0'
                       }}
-                    >
-                      {product.sku}
-                    </Typography>
+                    />
+                  ) : (
+                    <Chip
+                      icon={<CheckCircleOutlinedIcon sx={{ fontSize: '14px !important', color: '#10b981 !important' }} />}
+                      label={`${product.stock_quantity} in stock`}
+                      size="small"
+                      className="stock-badge in-stock"
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: '0.725rem',
+                        backgroundColor: '#ecfdf5',
+                        color: '#065f46',
+                        border: '1px solid rgba(16, 185, 129, 0.2)'
+                      }}
+                    />
+                  )}
+                </Box>
 
-                    {isOutOfStock ? (
-                      <Chip
-                        icon={<RemoveCircleOutlinedIcon fontSize="small" />}
-                        label="0 in stock — Unavailable"
-                        size="small"
-                        color="default"
-                        className="stock-badge out-of-stock"
-                        sx={{
-                          fontWeight: 600,
-                          fontSize: '0.725rem',
-                          backgroundColor: '#f1f5f9',
-                          color: '#64748b'
-                        }}
-                      />
-                    ) : (
-                      <Chip
-                        icon={<CheckCircleOutlinedIcon fontSize="small" />}
-                        label={`${product.stock_quantity} in stock`}
-                        size="small"
-                        color="success"
-                        className="stock-badge in-stock"
-                        sx={{
-                          fontWeight: 600,
-                          fontSize: '0.725rem',
-                          backgroundColor: '#ecfdf5',
-                          color: '#065f46',
-                          '& .MuiChip-icon': { color: '#10b981' }
-                        }}
-                      />
-                    )}
-                  </Box>
+                <Typography
+                  variant="subtitle1"
+                  component="h3"
+                  className="product-name"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: '1rem',
+                    lineHeight: 1.3,
+                    mb: 0.75,
+                    color: isOutOfStock ? 'text.secondary' : 'text.primary'
+                  }}
+                >
+                  {product.name}
+                </Typography>
 
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  className="product-desc"
+                  sx={{
+                    fontSize: '0.825rem',
+                    lineHeight: 1.5,
+                    color: '#64748b',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    minHeight: 40
+                  }}
+                >
+                  {product.description || 'No description provided.'}
+                </Typography>
+              </CardContent>
+
+              <CardActions
+                sx={{
+                  p: 2.5,
+                  pt: 0,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  borderTop: '1px solid #f8fafc'
+                }}
+                className="product-footer"
+              >
+                <Box>
+                  <Typography variant="caption" sx={{ color: '#94a3b8', display: 'block', fontSize: '0.7rem' }}>
+                    Unit Price
+                  </Typography>
                   <Typography
                     variant="h6"
-                    component="h3"
-                    className="product-name"
-                    sx={{
-                      fontWeight: 700,
-                      fontSize: '1rem',
-                      lineHeight: 1.3,
-                      mb: 1,
-                      color: isOutOfStock ? 'text.secondary' : 'text.primary'
-                    }}
+                    component="span"
+                    className="product-price"
+                    sx={{ fontWeight: 700, color: '#0f172a', fontSize: '1.15rem' }}
                   >
-                    {product.name}
+                    {formatCurrency(product.price)}
                   </Typography>
+                </Box>
 
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    className="product-desc"
-                    sx={{
-                      fontSize: '0.825rem',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                      minHeight: 40
-                    }}
-                  >
-                    {product.description || 'No description provided.'}
-                  </Typography>
-                </CardContent>
-
-                <CardActions
+                <Button
+                  className="btn-add"
+                  variant={isOutOfStock ? 'outlined' : 'contained'}
+                  disabled={cannotAddMore}
+                  onClick={() => onAddToCart(product)}
+                  startIcon={!cannotAddMore && <AddShoppingCartIcon fontSize="small" />}
+                  size="small"
                   sx={{
-                    p: 2.5,
-                    pt: 0,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
+                    borderRadius: 2,
+                    px: 2,
+                    py: 0.75,
+                    fontWeight: 600,
+                    fontSize: '0.8125rem',
+                    backgroundColor: isOutOfStock ? 'transparent' : '#4f46e5',
+                    color: isOutOfStock ? '#94a3b8' : '#ffffff',
+                    '&:hover': {
+                      backgroundColor: '#4338ca'
+                    },
+                    '&:disabled': {
+                      backgroundColor: '#f1f5f9',
+                      color: '#94a3b8',
+                      borderColor: '#e2e8f0'
+                    }
                   }}
-                  className="product-footer"
                 >
-                  <Box>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block' }}>
-                      Unit Price
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      component="span"
-                      className="product-price"
-                      sx={{ fontWeight: 700, color: 'text.primary', fontSize: '1.1rem' }}
-                    >
-                      {formatCurrency(product.price)}
-                    </Typography>
-                  </Box>
-
-                  <Button
-                    className="btn-add"
-                    variant={isOutOfStock ? 'outlined' : 'contained'}
-                    color="primary"
-                    disabled={cannotAddMore}
-                    onClick={() => onAddToCart(product)}
-                    startIcon={!cannotAddMore && <AddShoppingCartIcon fontSize="small" />}
-                    size="small"
-                    sx={{
-                      borderRadius: 2,
-                      px: 2,
-                      py: 0.8,
-                      fontWeight: 600,
-                      ...(cannotAddMore && {
-                        backgroundColor: '#f1f5f9 !important',
-                        color: '#94a3b8 !important',
-                        borderColor: '#e2e8f0 !important'
-                      })
-                    }}
-                  >
-                    {isOutOfStock
-                      ? 'Out of Stock'
-                      : remainingAvailable <= 0
-                      ? 'Max in Cart'
-                      : 'Add to Order'}
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
+                  {isOutOfStock
+                    ? 'Out of Stock'
+                    : remainingAvailable <= 0
+                    ? 'Max in Cart'
+                    : 'Add to Order'}
+                </Button>
+              </CardActions>
+            </Card>
           );
         })}
-      </Grid>
+      </Box>
 
       {/* Floating Bottom Bar for Cart Review */}
       {cartItems && cartItems.length > 0 && (
         <Paper
-          elevation={4}
+          elevation={6}
           className="cart-floating-banner"
           sx={{
             position: 'fixed',
@@ -318,10 +336,10 @@ export default function Catalogue({
             gap: 3,
             px: 3,
             py: 1.5,
-            borderRadius: 4,
+            borderRadius: 3,
             backgroundColor: '#0f172a',
             color: '#ffffff',
-            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.25)',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)',
             minWidth: { xs: '90%', sm: 540 }
           }}
         >
@@ -331,7 +349,7 @@ export default function Catalogue({
               size="small"
               className="cart-banner-badge"
               sx={{
-                backgroundColor: 'primary.main',
+                backgroundColor: '#4f46e5',
                 color: '#ffffff',
                 fontWeight: 700,
                 fontSize: '0.75rem'
@@ -351,7 +369,6 @@ export default function Catalogue({
           <Button
             className="btn-primary"
             variant="contained"
-            color="primary"
             onClick={onOpenCart}
             startIcon={<ShoppingCartCheckoutIcon />}
             sx={{
