@@ -59,9 +59,9 @@ The application uses an Express REST backend backed by a persistent SQLite relat
 
 - **Frontend:**
   - **React 18** (Modern functional components, hooks)
+  - **Material UI (MUI v5/v6)** (`@mui/material`, `@emotion/react`, `@emotion/styled`, `@mui/icons-material` with custom theme, cards, dialogs, tables, chips)
   - **Vite 5** (Fast ES modules bundler & development proxy)
-  - **Lucide React** (Consistent iconography)
-  - **Pure Modern CSS System** (Responsive layout, CSS custom properties, accessible status badges, modal dialogs)
+  - **Responsive Theme System** (Design tokens, custom typography, accessible status badges, glassmorphic floating bars)
 - **Backend:**
   - **Node.js (v20+)** (ES modules runtime)
   - **Express 4** (RESTful API routes & error handling)

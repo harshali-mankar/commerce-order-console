@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { Box, Container } from '@mui/material';
 import Header from './components/Header';
 import Catalogue from './components/Catalogue';
 import CartModal from './components/CartModal';
@@ -60,7 +61,6 @@ export default function App() {
   }, [loadProducts]);
 
   useEffect(() => {
-    // Debounce search/filter query
     const timer = setTimeout(() => {
       loadOrders();
     }, 250);
@@ -115,7 +115,6 @@ export default function App() {
   };
 
   const handleOrderSuccess = () => {
-    // Refresh both products and orders
     loadProducts();
     loadOrders();
   };
@@ -128,7 +127,7 @@ export default function App() {
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <div className="app-container">
+    <Box sx={{ minHeight: '100vh', backgroundColor: 'background.default' }} className="app-container">
       <Header
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -137,7 +136,7 @@ export default function App() {
         ordersCount={orders.length}
       />
 
-      <main className="main-content">
+      <Container maxWidth="lg" component="main" sx={{ pt: 4, pb: 6 }} className="main-content">
         {activeTab === 'catalogue' ? (
           <Catalogue
             products={products}
@@ -162,7 +161,7 @@ export default function App() {
             onNavigateCatalogue={() => setActiveTab('catalogue')}
           />
         )}
-      </main>
+      </Container>
 
       {/* Cart Modal */}
       <CartModal
@@ -183,6 +182,6 @@ export default function App() {
           onOrderUpdated={handleOrderUpdated}
         />
       )}
-    </div>
+    </Box>
   );
 }
